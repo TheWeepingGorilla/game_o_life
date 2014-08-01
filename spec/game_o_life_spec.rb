@@ -5,19 +5,6 @@ require 'rspec'
 require 'tests'
 require 'pry'
 
-# def any_alive(grid)
-#   alive_count = false
-#   grid.each do |row|
-#     row.each do |cell|
-#       if cell.cell.alive
-#         alive_count = true
-#       end
-#     end
-#   end
-#   alive_count
-# end
-
-
 describe 'Cell' do
   it 'Creates a cell' do
     test_cell = Cell.new
@@ -64,14 +51,29 @@ describe 'World' do
     end
     expect(any_alive).to eq true
   end
+  it 'transfers the properties of the present world to the future world' do
+    test_world = World.new
+    test_world.seed(test_world.present_grid)
+    test_world.create_the_future
+    binding.pry
+    any_alive = test_world.future_grid.any? do |row|
+      row.any? { |cell| cell.alive }
+    end
+    expect(any_alive).to eq true
+  end
 end
 
 describe 'Rules' do
-  it 'Evaluate surrounding cells' do
+  it 'births and kills the appropriate cells' do
     test_world = World.new
     test_world.present_grid[0][0].alive = true
     test_world.present_grid[1][2].alive = true
     test_world.present_grid[2][2].alive = true
-    expect(evaluate(test_world.present_grid,1,1)).to eq (3)
+    expect(evaluate(test_world.present_grid,1,1)).to eq "birth"
+    expect(evaluate(test_world.present_grid,0,1)).to eq "remain"
+    expect(evaluate(test_world.present_grid,4,4)).to eq "remain"
+    expect(evaluate(test_world.present_grid,2,2)).to eq "kill"
   end
+
+
 end
