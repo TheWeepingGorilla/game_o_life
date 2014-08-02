@@ -55,10 +55,9 @@ describe 'World' do
     test_world = World.new
     test_world.seed(test_world.present_grid)
     test_world.create_the_future
-    binding.pry
     any_alive = test_world.future_grid.any? do |row|
       row.any? { |cell| cell.alive }
-    end
+      end
     expect(any_alive).to eq true
   end
 end
